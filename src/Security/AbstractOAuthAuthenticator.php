@@ -48,7 +48,7 @@ abstract class AbstractOAuthAuthenticator extends OAuth2Authenticator
         $user = $this->getUserFromResourceOwner($resourceOwner);
 
         return new SelfValidatingPassport(
-            userBadge: new UserBadge($user->getUserIdentifier(), fn () => $user),
+            userBadge: new UserBadge($user->getUserIdentifier(), static fn () => $user),
             badges: [new RememberMeBadge()],
         );
     }
@@ -63,10 +63,10 @@ abstract class AbstractOAuthAuthenticator extends OAuth2Authenticator
         return $this->getClient()->fetchUserFromToken($credentials);
     }
 
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): RedirectResponse
     {
         $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
-        if ($targetPath) {
+        if (null !== $targetPath) {
             return new RedirectResponse($targetPath);
         }
 

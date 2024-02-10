@@ -18,6 +18,9 @@ class User implements UserInterface
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    /**
+     * @var string[]
+     */
     #[ORM\Column]
     private array $roles = [];
 
@@ -53,6 +56,8 @@ class User implements UserInterface
 
     /**
      * @see UserInterface
+     *
+     * @return string[]
      */
     public function getRoles(): array
     {
@@ -63,6 +68,9 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * @param string[] $roles
+     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;

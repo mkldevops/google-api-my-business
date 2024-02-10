@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Security\Enum\ServiceAuthEnum;
+use Exception;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,7 +20,7 @@ class SecurityController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(): Response
     {
-        if ($this->getUser()) {
+        if ($this->getUser() instanceof User) {
             return $this->redirectToRoute('app_home');
         }
 
@@ -26,12 +28,12 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route('/logout', name: 'app_logout')]
     public function logout(): void
     {
-        throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
+        throw new Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
     }
 
     #[Route('/oauth/connect/{service}', name: 'app_oauth_connect', methods: ['GET'])]
@@ -39,13 +41,12 @@ class SecurityController extends AbstractController
     {
         return $clientRegistry
             ->getClient($service->value)
-            ->redirect(self::SCOPES[$service->value]);
+            ->redirect(self::SCOPES[$service->value], []);
     }
 
     #[Route('/oauth/check/{service}', name: 'app_oauth_check', methods: ['GET', 'POST'])]
     public function check(ServiceAuthEnum $service): Response
     {
-
         return new Response(status: Response::HTTP_OK);
     }
 }
