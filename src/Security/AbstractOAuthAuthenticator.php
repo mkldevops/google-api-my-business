@@ -44,6 +44,8 @@ abstract class AbstractOAuthAuthenticator extends OAuth2Authenticator
     public function authenticate(Request $request): Passport
     {
         $credentials = $this->fetchAccessToken($this->getClient());
+        $request->getSession()->set('access_token', $credentials);
+
         $resourceOwner = $this->getResourceOwnerFromCredentials($credentials);
         $user = $this->getUserFromResourceOwner($resourceOwner);
 

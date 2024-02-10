@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include 'home/sidebar.html.twig' %}
+    <div class="ml-auto mb-6 lg:w-[75%] xl:w-[80%] 2xl:w-[85%]">
+        {% include 'home/header.html.twig' %}
+        {% block content '' %}
+    </div>
+
+{% endblock %}
+
+{% block title %}Dashboard{% endblock %}
