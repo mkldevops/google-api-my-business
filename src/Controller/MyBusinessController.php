@@ -31,6 +31,7 @@ class MyBusinessController extends AbstractController
 
         return $this->render('my_business/index.html.twig', [
             'myBusiness' => $myBusiness,
+            'token' => $accessToken->getToken(),
         ]);
     }
 }
